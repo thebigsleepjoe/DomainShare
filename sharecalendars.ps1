@@ -7,26 +7,27 @@ defined domain with all other users in the same domain. This provides access lev
 
 [CmdletBinding()]
 param (
-    [string]$targetDomain = "domain.com",
-    [string]$adminUpn = "admin@domain.com"
+    [string]$domain = "domain.com",
+    [string]$admin = "admin@domain.com",
+    [string]$target = "user@domain.com"
 )
 
 # prevent errs from leading @
-if ($targetDomain.StartsWith("@")) {
-    $targetDomain = $targetDomain.Substring(1)
+if ($domain.StartsWith("@")) {
+    $domain = $domain.Substring(1)
 }
 
-if ("domain.com" -eq $targetDomain -or "admin@domain.com" -eq $adminUpn) {
-    Write-Host "[ERR] Usage: .\script -targetDomain <domain.com> -adminUpn <admin@domain.com>"
+if ("domain.com" -eq $domain -or "admin@domain.com" -eq $admin) {
+    Write-Host "[ERR] Usage: .\script -domain <domain.com> -admin <admin@domain.com>"
     return
 }
 
-$domain = "@$targetDomain"
+$domain = "@$domain"
 
 Import-Module ExchangeOnlineManagement
 
 Write-Host "Connecting to EOM. Check for any SSO pop-ups!!!"
-Connect-ExchangeOnline -UserPrincipalName "$adminUpn" -ShowProgress $true
+Connect-ExchangeOnline -UserPrincipalName "$admin" -ShowProgress $true
 Write-Host "Finished connecting to EOM"
 
 Write-Host "Grabbing Mailboxes"
