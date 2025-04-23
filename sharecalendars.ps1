@@ -76,7 +76,15 @@ function Set-AllShareCalendarPerms {
     }
 }
 
-foreach ($mailbox in $mailboxes) {
-    $address = $mailbox.PrimarySmtpAddress
-    Set-AllShareCalendarPerms -emailAddress $address -mailboxes $mailboxes
+if ("user@domain.com" -eq $target) {
+    Write-Host "Sharing everyone with each other, as -target was not defined."
+    foreach ($mailbox in $mailboxes) {
+        $address = $mailbox.PrimarySmtpAddress
+        Set-AllShareCalendarPerms -emailAddress $address -mailboxes $mailboxes
+    }
+
+    return;
 }
+
+Write-Host "Sharing $target with everyone and vice versa"
+Set-AllShareCalendarPerms -emailAddress $target -mailboxes $mailboxes
