@@ -76,9 +76,14 @@ function Set-AllShareCalendarPerms {
     }
 }
 
+$n = 0
+$ttl = $mailboxes.Count
+
 if ("user@domain.com" -eq $target) {
     Write-Host "Sharing everyone with each other, as -target was not defined."
     foreach ($mailbox in $mailboxes) {
+        $n++
+        Write-Host "Sharing progress: $n/$ttl"
         $address = $mailbox.PrimarySmtpAddress
         Set-AllShareCalendarPerms -emailAddress $address -mailboxes $mailboxes
     }
@@ -87,4 +92,10 @@ if ("user@domain.com" -eq $target) {
 }
 
 Write-Host "Sharing $target with everyone and vice versa"
-Set-AllShareCalendarPerms -emailAddress $target -mailboxes $mailboxes
+foreach ($mailbox in $mailboxes) {
+    $n++
+    Write-Host "Sharing progress: $n/$ttl"
+    $address = $mailbox.PrimarySmtpAddress
+    Set-ShareCalendarPerms -calendarOwnerAddress $target -accessorAddress $address
+    Set-ShareCalendarPerms -calendarOwnerAddress $address -accessorAddress $target
+}
