@@ -12,6 +12,8 @@ param (
     [string]$target = "user@domain.com"
 )
 
+Write-Host "sharecalendars.ps1 v1.1 - by github.com/thebigsleepjoe"
+
 # prevent errs from leading @
 if ($domain.StartsWith("@")) {
     $domain = $domain.Substring(1)
